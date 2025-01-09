@@ -1,26 +1,67 @@
-Window.SetBackgroundTopColor (0.08627450980392157, 0.08627450980392157, 0.08627450980392157);           # Nice blue on top of the screen fading to
-Window.SetBackgroundBottomColor (0.08627450980392157, 0.08627450980392157, 0.08627450980392157);  # an equally nice brown on the bottom
+// set background to #161616
+Window.SetBackgroundTopColor (0.08627450980392157, 0.08627450980392157, 0.08627450980392157);
+Window.SetBackgroundBottomColor (0.08627450980392157, 0.08627450980392157, 0.08627450980392157);
 
-for (i = 0; i < 111; i++)
-  flyingman_image[i] = Image("progress-" + i + ".png");
-flyingman_sprite = Sprite();
+// fall asleep animation key frames
+ASLEEP_PRE_START = 38;
+ASLEEP_LOOP_START = 76;
+ASLEEP_LOOP_END = 120;
 
+// wake up animation key frames
+WAKEUP_PRE_START = 0;
+WAKEUP_LOOP_START = 12;
+WAKEUP_LOOP_END = 49;
 
-flyingman_sprite.SetX(Window.GetWidth() / 2 - flyingman_image[0].GetWidth() / 2); # Place in the centre
-flyingman_sprite.SetY(Window.GetHeight() / 2 - flyingman_image[0].GetHeight() / 2);
+// amount of droping refresh calls to slow down the animation
+SKIP_TICKS = 3;
 
-progress = 0;
+// populate frames
+animation.frames_total = 0;
+while (1) {
+    local.image = Image("frame-" + animation.frames_total + ".png");
+    if (!image) break;
+    animation.images[animation.frames_total++] = image;
+}
 
-fun refresh_callback ()
-  {
-    flyingman_sprite.SetImage(flyingman_image[Math.Int(progress / 3) % 111]);
-    progress++;
-  }
-  
-Plymouth.SetRefreshFunction (refresh_callback);
+animation.sprite = Sprite();
+animation.sprite.SetPosition(
+    (Window.GetWidth() - animation.images[0].GetWidth()) / 2,
+    (Window.GetHeight() - animation.images[0].GetHeight()) / 2,
+    0);
 
+// some debug sprites, feel free to uncomment and try it
+#animation.frame_counter.sprite = Sprite();
+#b_debug.sprite = Sprite();
+#animation.frame_counter.sprite.SetPosition(animation.sprite.GetX(), animation.sprite.GetY(), 10);
+#b_debug.sprite.SetPosition(100, 120, 10);
 
-#sudo update-alternatives --install /lib/plymouth/themes/default.plymouth default.plymouth /lib/plymouth/themes/mytheme/mytheme.plymouth 100
-#sudo update-alternatives --config default.plymouth
-#sudo update-initramfs -u
+tick = 0;
+fun animation_callback(){
+    if (tick <= SKIP_TICKS) tick++;
+    else {
+        tick = 0;
+        if (animation.current_frame > animation.loop_end) animation.current_frame = animation.loop_start;
+        animation.sprite.SetImage(animation.images[animation.current_frame]);
+        #animation.frame_counter.sprite.SetImage(Image.Text("frame: " + animation.current_frame, 1,1,1));
+        animation.current_frame++;
+    }
+}
 
+mode = Plymouth.GetMode();
+#b_debug.sprite.SetImage(Image.Text(mode, 1,1,0));
+
+if (mode == "boot" ||
+    mode == "resume" ||
+    mode == "updates" ||
+    mode == "system-upgrade" ||
+    mode == "firmware-upgrade"){
+    animation.current_frame = WAKEUP_PRE_START;
+    animation.loop_start = WAKEUP_LOOP_START;
+    animation.loop_end = WAKEUP_LOOP_END;
+} else {
+    animation.current_frame = ASLEEP_PRE_START;
+    animation.loop_start = ASLEEP_LOOP_START;
+    animation.loop_end = ASLEEP_LOOP_END;
+}
+
+Plymouth.SetRefreshFunction(animation_callback);
