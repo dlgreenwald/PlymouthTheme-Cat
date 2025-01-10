@@ -1,24 +1,45 @@
-# PlymouthTheme-Cat
-This is a Plymouth theme.
+# Cat - a plymouth theme
+This is a fork of a lovely [PlymouthTheme-Cat](https://github.com/krishnan793/PlymouthTheme-Cat)
+by [krishnan793](https://github.com/krishnan793). Since I really liked this old
+theme, I decided to improve it a bit. Now the animation differs for booting and
+shutdown modes. After playing some number of frames the animation is seamlessly
+looping.
 
-[![Video](https://4.bp.blogspot.com/-gG0MBGjEE9M/WBYXrOGrVGI/AAAAAAAABVE/auGpLRYf7jor4hu3jurYGcjaVBapHyAVACLcB/s320/8998adc40112985a8f29cf414925d390.gif)](https://www.youtube.com/watch?v=c6f478VBhtE)
 
+<table>
+  <tr>
+    <td>
+        wakeup full animation:<p>
+        <img src="./img/wakeup_full.gif" width = 250px>
+    </td>
+    <td>
+        asleep full animation:<p>
+        <img src="./img/asleep_full.gif" width = 250px></td>
+  </tr> 
+  <tr>
+    <td>
+        wakeup endless looping part:<p>
+        <img src="./img/wakeup_loop.gif" width = 250px>
+    </td>
+    <td>
+        asleep endless looping part:<p>
+        <img src="./img/asleep_loop.gif" width = 250px>
+    </td>
+  </tr>
+</table>
 
-[Video] https://www.youtube.com/watch?v=c6f478VBhtE
-
-[Blog] https://www.eionix.co.in/2016/10/30/plymouth-theme-for-ubuntu.html
 
 # Installation
 
-Clone this repository.
+Clone this repository somewhere.
 
-    sudo git clone https://github.com/krishnan793/PlymouthTheme-Cat.git /usr/share/plymouth/themes/PlymouthTheme-Cat
+    git clone https://github.com/derVedro/PlymouthTheme-Cat.git
 
-After installing you can test the theme through (as root, preferably on a tty):
+Then copy the cat directory into your plymouth themes directory.
 
-    # plymouthd
-    # plymouth --show-splash
-    # plymouth --quit
+    cd PlymouthTheme-Cat; sudo cp -r cat /usr/share/plymouth/themes/
+
+The next steps may vary from distribution to distribution:
 
 ## On most distros
 
@@ -46,7 +67,7 @@ Check that the theme ended up in the right place:
 
 Set the theme as default:
 
-    sudo plymouth-set-default-theme PlymouthTheme-Cat -R
+    sudo plymouth-set-default-theme cat -R
 
 The -R option rebuilds the initrd automatically which is necessary.
 
@@ -54,7 +75,7 @@ The -R option rebuilds the initrd automatically which is necessary.
 
 Install the theme.
 
-    sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/PlymouthTheme-Cat/PlymouthTheme-Cat.plymouth 100
+    sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/cat/cat.plymouth 100
 
 Select the default theme.
 
@@ -66,4 +87,14 @@ Update the initramfs image.
 
 Now reboot.
 
-If you want to install this on < Ubuntu 16.04, change the path from /usr/share/plymouth to /lib/plymouth/ . You need to do this on the PlymouthTheme-Cat.plymouth file also.
+If you want to install this on < Ubuntu 16.04, change the path from /usr/share/plymouth to /lib/plymouth/ . You need to do this on the cat.plymouth file also.
+
+# Test theme
+
+To test the current theme you can use the `preview-plymouth-theme.sh` bash
+script from repository root directory. You should run it as root. You can pass
+the preview duration as an optional argument to the script. Be warned if you pass
+large time values. Plymouth takes over the keyboard input, so it is unfortunately
+not possible to cancel the preview with CTRL+C.
+
+    sudo ./preview-plymouth-theme.sh [TIME_IN_SECONDS]
