@@ -98,3 +98,15 @@ large time values. Plymouth takes over the keyboard input, so it is unfortunatel
 not possible to cancel the preview with CTRL+C.
 
     sudo ./preview-plymouth-theme.sh [TIME_IN_SECONDS]
+
+# FAQ
+
+### My disk is enctrypted, I do not see the password prompt. What should I do?
+
+The password input field is masked. Just type your password during startup in
+and do not forget to hit enter.
+
+### The boot animation is too slow / fast. Is there anything I can do about it?
+
+Yes, you can edit `SKIP_TICKS` value in `cat.script` file. The higher the value,
+the slower is the animation played.
