@@ -3,7 +3,7 @@ This is a fork of a lovely [PlymouthTheme-Cat](https://github.com/krishnan793/Pl
 by [krishnan793](https://github.com/krishnan793). Since I really liked this old
 theme, I decided to improve it a bit. Now the animation differs for booting and
 shutdown modes. After playing some number of frames the animation is seamlessly
-looping.
+looping.  Lock graphic and code shamlessly borrowed from [plymouth-theme-chain](https://github.com/Hugopikachu/plymouth-theme-chain).
 
 
 <table>
@@ -100,11 +100,6 @@ not possible to cancel the preview with CTRL+C.
     sudo ./preview-plymouth-theme.sh [TIME_IN_SECONDS]
 
 # FAQ
-
-### My disk is enctrypted, I do not see the password prompt. What should I do?
-
-The password input field is masked. Just type your password during startup in
-and do not forget to hit enter.
 
 ### The boot animation is too slow / fast. Is there anything I can do about it?
 
